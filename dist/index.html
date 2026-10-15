@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080d13">
+  <meta name="description" content="NEXUS 声场引擎：在本机运行的电子科幻音乐可视化实验室。">
+  <title>NEXUS — 声场引擎</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23080d13'/%3E%3Cpath d='M10 28V12l20 16V12M10 20l20-8' fill='none' stroke='%2368e5e0' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script src="audio.js" defer></script>
+  <script src="visualizer.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-nexus" viewBox="0 0 32 32"><path d="M6 25V7l20 18V7M6 16l20-9"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l11-2v13M9 9l11-2"/><ellipse cx="6" cy="18" rx="3" ry="3"/><ellipse cx="17" cy="16" rx="3" ry="3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5M4 15v6h16v-6"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M3 7h4l2-3h6l2 3h4v14H3Z"/><circle cx="12" cy="13" r="4"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 0 5M4 4v6h6"/></symbol>
+    <symbol id="i-keys" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 9h1m4 0h1m4 0h1M6 12h1m4 0h1m4 0h1M7 16h10"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M5 5v14m14-14L7 12l12 7Z"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M19 5v14M5 5l12 7-12 7Z"/></symbol>
+    <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4M3 10V6h18M7 22l-4-4 4-4m14 0v4H3"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5Zm4 4a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="m11 4-6 5H2v6h3l6 5Zm5 5 6 6m0-6-6 6"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 10v2a7 7 0 0 0 14 0v-2m-7 9v3m-4 0h8"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12m0-12L6 18"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6Zm-4 9 3 3 5-6"/></symbol>
+    <symbol id="i-hex" viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7Zm-9 5 9 5 9-5m-9 5v10"/></symbol>
+    <symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><ellipse cx="12" cy="12" rx="11" ry="6" transform="rotate(-35 12 12)"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24"><path d="m2 16 4-8 4 11 4-16 4 13 4-6"/></symbol>
+  </defs></svg>
+
+  <header class="topbar">
+    <a class="brand" href="./index.html" aria-label="NEXUS 声场引擎首页"><span class="brand-mark"><svg><use href="#i-nexus"/></svg></span><span>NEXUS<span class="brand-sub">声 场 引 擎</span></span></a>
+    <div class="header-divider"></div><span class="edition">AUDIO VISUAL LAB <span>/</span> V1.2</span>
+    <div class="header-right"><span class="system-status"><i></i> SYSTEM READY</span><span id="clock" class="clock">00:00:00</span><button id="fullscreen" class="icon-button" title="全屏 (F)" aria-label="全屏"><svg><use href="#i-expand"/></svg></button></div>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <p class="section-kicker">WORKSPACE <span>01</span></p>
+      <nav aria-label="工作空间"><button class="nav-item active" id="nav-visual"><svg><use href="#i-grid"/></svg>声音可视化<span class="nav-dot"></span></button><button class="nav-item" id="library-open"><svg><use href="#i-music"/></svg>我的音乐库<span id="library-count" class="nav-count">01</span></button></nav>
+      <div class="queue-heading"><span class="section-kicker">播放队列 <span id="queue-count">01</span></span><button class="icon-button small" id="add-music" title="添加音乐" aria-label="添加音乐"><svg><use href="#i-plus"/></svg></button></div>
+      <div id="queue" class="queue" aria-label="播放队列"></div>
+      <button class="import-zone" id="import"><span class="import-symbol"><svg><use href="#i-upload"/></svg></span><strong>把音乐带进来</strong><span>点击导入 / 拖放音频文件</span><small>MP3 · WAV · FLAC · M4A · OGG</small></button>
+      <div class="sidebar-bottom"><button class="shortcut-link" id="shortcuts-open"><svg><use href="#i-keys"/></svg>键盘快捷键<span>⌘</span></button><div class="privacy"><svg><use href="#i-shield"/></svg><div>声音留在你的设备<small>100% 本地处理，无需联网</small></div></div><a class="reference-link" href="https://github.com/wzk112/reactor-audio-visualizer" target="_blank" rel="noopener noreferrer">灵感源自 REACTOR<svg><use href="#i-arrow"/></svg></a></div>
+    </aside>
+
+    <main class="main-content">
+      <div class="page-heading"><div><p class="section-kicker">SOUND INTO MATTER</p><h1>听见声音，<span>看见共振。</span></h1></div><div class="heading-actions"><button id="mobile-library" class="mobile-action icon-button" title="音乐库" aria-label="打开音乐库"><svg><use href="#i-music"/></svg></button><button id="mobile-import" class="mobile-action icon-button" title="导入音乐" aria-label="导入音乐"><svg><use href="#i-plus"/></svg></button><span class="local-badge"><i></i> 本地运行</span></div></div>
+      <section class="visual-stage" id="visual-stage" aria-label="音乐可视化场景">
+        <canvas id="visualizer" aria-label="随音乐频谱变化的三维可视化。拖动旋转，滚轮缩放。"></canvas>
+        <div class="stage-top"><div class="scene-heading"><span class="tiny-label">ACTIVE SCENE / <span id="scene-number">01</span></span><h2 id="scene-title">声场反应堆</h2><span id="scene-subtitle">RESONANCE CORE</span></div><div class="stage-tools"><span id="signal-status" class="signal-status"><i></i> 演示预览</span><button id="snapshot" class="icon-button" title="保存场景截图" aria-label="保存场景截图"><svg><use href="#i-camera"/></svg></button><button id="focus-mode" class="icon-button" title="沉浸模式" aria-label="进入沉浸模式"><svg><use href="#i-expand"/></svg></button></div></div>
+        <div class="stage-side-label">FREQUENCY → GEOMETRY</div>
+        <div class="stage-axis"><span>+Y</span><i></i><span>+X</span></div>
+        <div class="stage-bottom"><div><span class="live-cross">+</span><span id="node-label">547 个共振单元</span><span class="stage-separator">/</span><span id="fps">60 FPS</span></div><button id="reset-view" class="text-button"><svg><use href="#i-reset"/></svg>重置视角</button></div>
+        <div class="stage-hint" id="stage-hint">拖动旋转 <span>·</span> 滚轮缩放 <span>·</span> 播放音乐，唤醒声场</div>
+        <button id="exit-focus" class="exit-focus" hidden><svg><use href="#i-close"/></svg>退出沉浸</button>
+      </section>
+
+      <div class="scene-selection-heading"><span class="section-kicker">选择你的声场 <span>/ VISUAL PRESETS</span></span><span class="scene-count">03 SCENES</span></div>
+      <div class="scene-presets" aria-label="可视化场景">
+        <button class="scene-card selected" data-scene="reactor" aria-pressed="true"><span class="preset-art core-art"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="preset-copy"><strong>声场反应堆</strong><small>RESONANCE CORE</small></span><span class="preset-number">01</span></button>
+        <button class="scene-card" data-scene="orbit" aria-pressed="false"><span class="preset-art orbit-art"><i></i><i></i><i></i></span><span class="preset-copy"><strong>星环脉冲</strong><small>ORBITAL PULSE</small></span><span class="preset-number">02</span></button>
+        <button class="scene-card" data-scene="terrain" aria-pressed="false"><span class="preset-art terrain-art"><i></i><i></i><i></i><i></i></span><span class="preset-copy"><strong>频谱地形</strong><small>SPECTRAL TERRAIN</small></span><span class="preset-number">03</span></button>
+      </div>
+      <div class="workspace-footnote"><span><i></i> 为每一段声音，创造独一无二的空间。</span><span>POWERED BY YOUR MUSIC</span></div>
+    </main>
+
+    <aside class="controls" aria-label="场景控制">
+      <div class="controls-heading"><h2>场景控制</h2><button id="reset-settings" class="icon-button small" title="重置场景设置" aria-label="重置场景设置"><svg><use href="#i-reset"/></svg></button></div>
+      <section class="control-section"><div class="control-section-heading"><span>音频来源</span><small>01 / SOURCE</small></div><div class="segmented"><button id="source-music" class="selected" aria-pressed="true"><svg><use href="#i-music"/></svg>音乐文件</button><button id="source-mic" aria-pressed="false"><svg><use href="#i-mic"/></svg>麦克风</button></div><p class="input-note" id="input-note">内置演示音轨已就绪</p></section>
+      <section class="control-section"><div class="control-section-heading"><span>动态响应</span><small>02 / MOTION</small></div><div class="slider-label"><label for="sensitivity">响应强度</label><output id="sensitivity-value" for="sensitivity">1.4<span>×</span></output></div><input id="sensitivity" type="range" min="0.4" max="3" step="0.1" value="1.4"><div class="range-labels"><span>细腻</span><span>强烈</span></div><div class="slider-label"><label for="smoothing">运动平滑</label><output id="smoothing-value" for="smoothing">75<span>%</span></output></div><input id="smoothing" type="range" min="0" max="95" step="1" value="75"><div class="toggle-row"><label for="auto-rotate">自动环绕<small>让视角随时间缓慢移动</small></label><input id="auto-rotate" type="checkbox" role="switch" class="switch" checked></div></section>
+      <section class="control-section"><div class="control-section-heading"><span>视觉氛围</span><small>03 / COLOR</small></div><div class="palette-options" aria-label="配色方案"><button data-palette="cyan" class="palette selected" aria-label="离子蓝" aria-pressed="true"><i style="--swatch:#67e4df"></i></button><button data-palette="violet" class="palette" aria-label="等离子紫" aria-pressed="false"><i style="--swatch:#b9a0ff"></i></button><button data-palette="amber" class="palette" aria-label="熔核橙" aria-pressed="false"><i style="--swatch:#ffa868"></i></button><span id="palette-name">离子蓝</span></div><div class="slider-label"><label for="glow">辉光强度</label><output id="glow-value" for="glow">65<span>%</span></output></div><input id="glow" type="range" min="0" max="100" value="65"><div id="reactor-transparency-control" class="reactor-control"><div class="slider-label"><label for="transparency">反应堆透明度</label><output id="transparency-value" for="transparency">20<span>%</span></output></div><input id="transparency" type="range" min="0" max="100" step="1" value="20" aria-describedby="transparency-note"><div class="range-labels"><span>实体</span><span>线框</span></div><p id="transparency-note" class="input-note">仅影响柱体填充，轮廓始终可见。</p></div></section>
+      <section class="control-section analysis-section"><div class="control-section-heading"><span>实时频谱</span><small><i class="live-dot"></i> ANALYSIS</small></div><canvas id="spectrum" aria-label="实时音频频谱"></canvas><div class="frequency-labels"><span>20 Hz</span><span>1 kHz</span><span>20 kHz</span></div><div class="readings"><div><span>输入电平</span><strong id="level">—<small>dBFS</small></strong></div><div><span>峰值频率</span><strong id="peak">—<small>Hz</small></strong></div></div><div class="band-color-key"><div id="frequency-gradient" class="frequency-gradient" role="img" aria-label="低频经中频到高频的连续颜色渐变"></div><div class="band-legend"><span><i></i>低频</span><span><i></i>中频</span><span><i></i>高频</span></div></div></section>
+      <p id="status-message" role="status" class="status-message">一切就绪，按下播放开始探索。</p>
+    </aside>
+  </div>
+
+  <footer class="player">
+    <div class="now-playing"><div class="album-art"><span>N</span><small>NX / 01</small></div><div class="track-info"><strong id="track-name">Neon Drift</strong><span id="track-meta">NEXUS ORIGINAL · 112 BPM</span></div><span id="playing-eq" class="playing-eq"><i></i><i></i><i></i><i></i></span></div>
+    <div class="transport"><div class="transport-buttons"><button id="repeat" class="icon-button active" title="单曲循环：已开启" aria-label="关闭单曲循环" aria-pressed="true"><svg><use href="#i-repeat"/></svg></button><button id="previous" class="icon-button" title="上一曲" aria-label="上一曲"><svg><use href="#i-prev"/></svg></button><button id="play" class="play-button" aria-label="播放" title="播放 / 暂停 (空格)"><svg><use href="#i-play"/></svg></button><button id="next" class="icon-button" title="下一曲" aria-label="下一曲"><svg><use href="#i-next"/></svg></button><span class="transport-spacer"></span></div><div class="progress-row"><span id="elapsed">0:00</span><input id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="播放进度"><span id="duration">1:08</span></div></div>
+    <div class="player-right"><button id="mute" class="icon-button" aria-label="静音" title="静音 (M)"><svg><use href="#i-volume"/></svg></button><input id="volume" type="range" min="0" max="100" value="45" aria-label="音量"><output id="volume-value" for="volume">45%</output><span class="audio-quality">LOCAL<br><b>STEREO</b></span></div>
+  </footer>
+  <input id="file-input" type="file" accept="audio/*,.mp3,.wav,.flac,.m4a,.ogg,.aac,.opus,.aiff,.webm" multiple hidden>
+  <div id="drop-overlay" hidden><svg><use href="#i-upload"/></svg><h2>让你的音乐进入声场</h2><p>松开以导入音频文件</p></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <dialog id="shortcuts-dialog"><div class="dialog-heading"><div><span class="section-kicker">TAKE CONTROL</span><h2>让操作跟上节奏</h2></div><button class="icon-button" data-close aria-label="关闭"><svg><use href="#i-close"/></svg></button></div><div class="shortcut-grid"><span>播放 / 暂停</span><kbd>Space</kbd><span>全屏</span><kbd>F</kbd><span>静音 / 恢复音量</span><kbd>M</kbd><span>自动环绕</span><kbd>R</kbd><span>切换声场</span><kbd>1 / 2 / 3</kbd><span>退出沉浸模式</span><kbd>Esc</kbd></div><p class="dialog-note">拖动场景调整视角，滚动鼠标滚轮缩放。</p></dialog>
+  <dialog id="library-dialog"><div class="dialog-heading"><div><span class="section-kicker">YOUR SOUND, YOUR SPACE</span><h2>我的音乐库</h2></div><button class="icon-button" data-close aria-label="关闭"><svg><use href="#i-close"/></svg></button></div><div id="library-list"></div><button id="library-import" class="primary-button"><svg><use href="#i-plus"/></svg>导入音乐</button><p class="dialog-note">支持格式取决于浏览器。音乐仅在本次会话保留，关闭后可重新导入。</p></dialog>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "nexus-audio-visualizer",
+  "version": "1.2.0",
+  "private": true,
+  "description": "A local-first science-fiction music visualization studio",
+  "scripts": {
+    "start": "node server.cjs",
+    "test": "node --test qa/audio.test.cjs",
+    "check": "node --check dist/audio.js && node --check dist/visualizer.js && node --check dist/app.js && node --check server.cjs && node --check launcher.cjs"
+  }
+}
